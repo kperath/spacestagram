@@ -22,7 +22,7 @@ function App() {
 
       <div className="container mx-auto p-4 flex flex-wrap justify-center">
         {posts.map((p) => (
-          <Card dateTime={p.format("ddd, DD MMM YYYY").toString()} />
+          <Card date={p} />
         ))}
       </div>
     </div>

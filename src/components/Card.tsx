@@ -1,23 +1,42 @@
-import { useState } from "react";
+import dayjs from "dayjs";
+import { useState, useEffect } from "react";
+import { getAPOD, APOD } from "../API";
 import nasa from "../nasa.jpg";
 
 interface props {
-  dateTime: string;
+  date: dayjs.Dayjs;
 }
 
-const Card = ({ dateTime }: props) => {
+const Card = ({ date }: props) => {
   const [liked, setLiked] = useState(false);
+  const [postData, setPostData] = useState<APOD>();
+  const dateTime = date.format("ddd, DD MMM YYYY").toString();
+
+  useEffect(() => {
+    const apodDate = date.format("YYYY-MM-DD");
+    const fetchAPOD = async () => {
+      try {
+        // await getAPOD(apodDate)
+        // setPostData(await getAPOD(apodDate));
+        setPostData({
+          date: apodDate,
+          title: "Testing",
+          explanation: "explaining",
+          url: nasa,
+        });
+      } catch (err) {
+        console.error("Failed to load image:", err);
+      }
+    };
+    fetchAPOD();
+  }, [date]);
 
   return (
     <div className="my-4 mx-2 max-w-sm rounded-lg overflow-hidden shadow-lg bg-white">
-      <img className="w-full" src={nasa} alt="Sunset in the mountains" />
+      <img className="w-full" src={postData?.url} alt={postData?.title} />
       <div className="px-6 pt-4 pb-2">
-        <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
-        <p className="text-gray-700 text-base">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
-          quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
-          nihil.
-        </p>
+        <div className="font-bold text-xl mb-2">{postData?.title}</div>
+        <p className="text-gray-700 text-base">{postData?.explanation}</p>
         <div className="flex align-bottom mt-2 mb-1 justify-between">
           <button
             onClick={() => setLiked((prevState) => !prevState)}
