@@ -11,8 +11,8 @@ export interface APOD {
 const showDefaultOnError = (date: string): APOD => {
   return {
     date: date,
-    title: "Uh Oh! This Image was lost in space",
-    explanation: "Failed to retrieve image",
+    title: "Uh Oh! The media you're looking for was lost in space!",
+    explanation: "Please try again later.",
     url: "./nasa.jpg",
     media_type: "image",
   };
