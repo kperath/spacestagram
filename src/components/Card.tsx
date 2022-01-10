@@ -4,16 +4,16 @@ import { getAPOD, APOD } from "../API";
 import nasa from "../nasa.jpg";
 
 interface props {
-  date: dayjs.Dayjs;
+  readableDate: string;
+  apodDate: string;
+  cardRef?: (...args: any[]) => any;
 }
 
-const Card = ({ date }: props) => {
+const Card = ({ readableDate, apodDate, cardRef }: props) => {
   const [liked, setLiked] = useState(false);
   const [postData, setPostData] = useState<APOD>();
-  const dateTime = date.format("ddd, DD MMM YYYY").toString();
 
   useEffect(() => {
-    const apodDate = date.format("YYYY-MM-DD");
     const fetchAPOD = async () => {
       try {
         setPostData({
@@ -21,18 +21,23 @@ const Card = ({ date }: props) => {
           title: "Comet Leonard's Tail Wag",
           explanation:
             "Why does Comet Leonard's tail wag? The featured time-lapse video shows the ion tail of Comet C/2021 A1 (Leonard) as it changed over ten days early last month.  The video was taken by NASA's Solar Terrestrial Relations Observatory-Ahead (STEREO-A) spacecraft that co-orbits the Sun at roughly the same distance as the Earth. Each image in this 29-degree field was subtracted from following image to create frames that highlight differences. The video clearly shows Comet Leonard's long ion tail extending, wagging, and otherwise being blown around by the solar wind -- a stream of fast-moving ions that stream out from the Sun.  Since the video was taken, Comet Leonard continued plunging toward the Sun, reached its closest approach to the Sun between the orbits of Mercury and Venus, survived this closest approach without breaking apart, and is now fading as heads out of our Solar System.   Tuesday over Zoom: APOD editor to present the Best APOD Space Images of 2021",
-          url: "https://www.youtube.com/embed/RtDSxi-D4KA?rel=0",
-          media_type: "video",
+          // url: "https://www.youtube.com/embed/RtDSxi-D4KA?rel=0",
+          // media_type: "video",
+          url: nasa,
+          media_type: "image",
         });
       } catch (err) {
         console.error("Failed to load image:", err);
       }
     };
     fetchAPOD();
-  }, [date]);
+  }, [apodDate]);
 
   return (
-    <div className="my-4 mx-2 max-w-sm rounded-lg overflow-hidden shadow-lg bg-white">
+    <div
+      className="my-4 mx-2 max-w-sm rounded-lg overflow-hidden shadow-lg bg-white"
+      ref={cardRef}
+    >
       {postData?.media_type === "video" ? (
         <iframe
           className="w-full aspect-video"
@@ -68,7 +73,7 @@ const Card = ({ date }: props) => {
             </svg>
           </button>
           <span className="bg-gray-200 rounded-full px-3 -mr-4 py-1 text-sm font-semibold text-gray-700 mt-1">
-            {dateTime}
+            {readableDate}
           </span>
         </div>
       </div>
