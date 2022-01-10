@@ -5,6 +5,7 @@ export interface APOD {
   title: string;
   explanation: string;
   url: string;
+  media_type: string;
 }
 
 const showDefaultOnError = (date: string): APOD => {
@@ -13,6 +14,7 @@ const showDefaultOnError = (date: string): APOD => {
     title: "Uh Oh! This Image was lost in space",
     explanation: "Failed to retrieve image",
     url: "./nasa.jpg",
+    media_type: "image",
   };
 };
 
