@@ -16,13 +16,13 @@ const Card = ({ date }: props) => {
     const apodDate = date.format("YYYY-MM-DD");
     const fetchAPOD = async () => {
       try {
-        // await getAPOD(apodDate)
-        // setPostData(await getAPOD(apodDate));
         setPostData({
           date: apodDate,
-          title: "Testing",
-          explanation: "explaining",
-          url: nasa,
+          title: "Comet Leonard's Tail Wag",
+          explanation:
+            "Why does Comet Leonard's tail wag? The featured time-lapse video shows the ion tail of Comet C/2021 A1 (Leonard) as it changed over ten days early last month.  The video was taken by NASA's Solar Terrestrial Relations Observatory-Ahead (STEREO-A) spacecraft that co-orbits the Sun at roughly the same distance as the Earth. Each image in this 29-degree field was subtracted from following image to create frames that highlight differences. The video clearly shows Comet Leonard's long ion tail extending, wagging, and otherwise being blown around by the solar wind -- a stream of fast-moving ions that stream out from the Sun.  Since the video was taken, Comet Leonard continued plunging toward the Sun, reached its closest approach to the Sun between the orbits of Mercury and Venus, survived this closest approach without breaking apart, and is now fading as heads out of our Solar System.   Tuesday over Zoom: APOD editor to present the Best APOD Space Images of 2021",
+          url: "https://www.youtube.com/embed/RtDSxi-D4KA?rel=0",
+          media_type: "video",
         });
       } catch (err) {
         console.error("Failed to load image:", err);
@@ -33,7 +33,18 @@ const Card = ({ date }: props) => {
 
   return (
     <div className="my-4 mx-2 max-w-sm rounded-lg overflow-hidden shadow-lg bg-white">
-      <img className="w-full" src={postData?.url} alt={postData?.title} />
+      {postData?.media_type === "video" ? (
+        <iframe
+          className="w-full aspect-video"
+          src={postData.url}
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      ) : (
+        <img className="w-full" src={postData?.url} alt={postData?.title} />
+      )}
       <div className="px-6 pt-4 pb-2">
         <div className="font-bold text-xl mb-2">{postData?.title}</div>
         <p className="text-gray-700 text-base">{postData?.explanation}</p>
