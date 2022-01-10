@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import nasa from '../nasa.jpg'
-//import './App.css';
 
 function Card() {
 
