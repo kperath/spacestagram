@@ -7,20 +7,18 @@ function App() {
 
   useEffect(() => {
     const last3Months: dayjs.Dayjs[] = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 15; i++) {
       last3Months.push(dayjs().add(-i, "day"));
     }
     setPosts(last3Months);
   }, []);
 
   return (
-    <div className="bg-gray-100 h-screen">
+    <div className="bg-gray-100">
       <h1 className="app-title text-6xl md:text-8xl p-6 text-center">
         Spacestagram
       </h1>
-      <h6 className="app-title text-center mb-2 w-screen">
-        Powered by Nasa 🚀
-      </h6>
+      <h6 className="app-title text-center mb-2">Powered by Nasa 🚀</h6>
 
       <div className="container mx-auto p-4 flex flex-wrap justify-center">
         {posts.map((p) => (
