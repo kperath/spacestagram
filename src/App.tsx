@@ -5,11 +5,14 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 function App() {
   const [posts, setPosts] = useState<dayjs.Dayjs[]>([]);
   const [pageLimit, setPageLimit] = useState(10);
+  const [loading, setLoading] = useState(true);
 
   // Infinite scroll
   const observer = useRef<IntersectionObserver>();
   const endCardRef = useCallback(
     (node) => {
+      if (loading) return;
+
       // disconnect observer from previous last node
       if (observer.current) observer.current.disconnect();
 
@@ -29,7 +32,7 @@ function App() {
       // if an end node exists, observe it
       if (node) observer.current.observe(node);
     },
-    [pageLimit]
+    [pageLimit, loading]
   );
 
   // load posts from last 10 days
@@ -56,6 +59,7 @@ function App() {
             readableDate={readableDate}
             apodDate={apodDate}
             cardRef={endCardRef}
+            setLoading={setLoading}
           />
         );
       } else if (i < pageLimit - 1) {
@@ -74,6 +78,11 @@ function App() {
 
   return (
     <div className="bg-gray-100">
+      <div className="float-left p-2 app-title">
+        <a href="https://kperath.com/" target="_blank" rel="noreferrer">
+          About Me
+        </a>
+      </div>
       <h1 className="app-title text-6xl md:text-8xl p-6 text-center">
         Spacestagram
       </h1>
