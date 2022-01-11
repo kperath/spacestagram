@@ -5,6 +5,7 @@ interface props {
   readableDate: string;
   apodDate: string;
   cardRef?: (...args: any[]) => any;
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // state for like button
@@ -12,7 +13,7 @@ interface likeState {
   liked: boolean;
 }
 
-const Card = ({ readableDate, apodDate, cardRef }: props) => {
+const Card = ({ readableDate, apodDate, cardRef, setLoading }: props) => {
   const [liked, setLiked] = useState(() => {
     const store = window.localStorage.getItem(apodDate);
     if (store === null) {
@@ -34,13 +35,19 @@ const Card = ({ readableDate, apodDate, cardRef }: props) => {
       try {
         await getAPOD(apodDate);
         setPostData(await getAPOD(apodDate));
+        if (setLoading !== undefined) {
+          setLoading(false);
+        }
       } catch (err) {
         console.error("Failed to load media:", err);
         setPostData(missingAPOD(apodDate));
+        if (setLoading !== undefined) {
+          setLoading(false);
+        }
       }
     };
     fetchAPOD();
-  }, [apodDate]);
+  }, [apodDate, setLoading]);
 
   return (
     <div
