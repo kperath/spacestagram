@@ -9,9 +9,27 @@ interface props {
   cardRef?: (...args: any[]) => any;
 }
 
+// state for like button
+interface likeState {
+  liked: boolean;
+}
+
 const Card = ({ readableDate, apodDate, cardRef }: props) => {
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(() => {
+    const store = window.localStorage.getItem(apodDate);
+    if (store === null) {
+      return false;
+    }
+    const postState: likeState = JSON.parse(store);
+    return postState.liked;
+  });
+
   const [postData, setPostData] = useState<APOD>();
+
+  const likePost = () => {
+    window.localStorage.setItem(apodDate, JSON.stringify({ liked: !liked }));
+    setLiked((prevState) => !prevState);
+  };
 
   useEffect(() => {
     const fetchAPOD = async () => {
@@ -55,7 +73,7 @@ const Card = ({ readableDate, apodDate, cardRef }: props) => {
         <p className="text-gray-700 text-base">{postData?.explanation}</p>
         <div className="flex align-bottom mt-2 mb-1 justify-between">
           <button
-            onClick={() => setLiked((prevState) => !prevState)}
+            onClick={likePost}
             className={`border-2 border-transparent px-2 -ml-2 rounded-full transform transition duration-300 scale-110 hover:scale-125 ${
               liked ? "fill-red-500" : "fill-gray-400"
             }`}
