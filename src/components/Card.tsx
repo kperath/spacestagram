@@ -1,7 +1,5 @@
-import dayjs from "dayjs";
 import { useState, useEffect } from "react";
-import { getAPOD, APOD } from "../API";
-import nasa from "../nasa.jpg";
+import { getAPOD, APOD, missingAPOD } from "../API";
 
 interface props {
   readableDate: string;
@@ -34,18 +32,11 @@ const Card = ({ readableDate, apodDate, cardRef }: props) => {
   useEffect(() => {
     const fetchAPOD = async () => {
       try {
-        setPostData({
-          date: apodDate,
-          title: "Comet Leonard's Tail Wag",
-          explanation:
-            "Why does Comet Leonard's tail wag? The featured time-lapse video shows the ion tail of Comet C/2021 A1 (Leonard) as it changed over ten days early last month.  The video was taken by NASA's Solar Terrestrial Relations Observatory-Ahead (STEREO-A) spacecraft that co-orbits the Sun at roughly the same distance as the Earth. Each image in this 29-degree field was subtracted from following image to create frames that highlight differences. The video clearly shows Comet Leonard's long ion tail extending, wagging, and otherwise being blown around by the solar wind -- a stream of fast-moving ions that stream out from the Sun.  Since the video was taken, Comet Leonard continued plunging toward the Sun, reached its closest approach to the Sun between the orbits of Mercury and Venus, survived this closest approach without breaking apart, and is now fading as heads out of our Solar System.   Tuesday over Zoom: APOD editor to present the Best APOD Space Images of 2021",
-          // url: "https://www.youtube.com/embed/RtDSxi-D4KA?rel=0",
-          // media_type: "video",
-          url: nasa,
-          media_type: "image",
-        });
+        await getAPOD(apodDate);
+        setPostData(await getAPOD(apodDate));
       } catch (err) {
-        console.error("Failed to load image:", err);
+        console.error("Failed to load media:", err);
+        setPostData(missingAPOD(apodDate));
       }
     };
     fetchAPOD();

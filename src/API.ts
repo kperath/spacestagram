@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import errorImage from "./error_image.jpg";
 
 export interface APOD {
   date: string;
@@ -8,12 +8,12 @@ export interface APOD {
   media_type: string;
 }
 
-const showDefaultOnError = (date: string): APOD => {
+export const missingAPOD = (date: string): APOD => {
   return {
     date: date,
     title: "Uh Oh! The media you're looking for was lost in space!",
     explanation: "Please try again later.",
-    url: "./nasa.jpg",
+    url: errorImage,
     media_type: "image",
   };
 };
@@ -23,11 +23,14 @@ export const getAPOD = async (apodDate: string): Promise<APOD> => {
     const resp = await fetch(
       `${process.env.REACT_APP_API_URL}&date=${apodDate}`
     );
-    return await resp.json();
+    if (resp.ok) {
+      return await resp.json();
+    }
+    throw new Error("Failed to retrieve media");
   } catch (err) {
     if (err instanceof Error) {
       console.error(err.message);
     }
-    return showDefaultOnError(apodDate);
+    return missingAPOD(apodDate);
   }
 };
