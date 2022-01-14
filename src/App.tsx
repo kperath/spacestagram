@@ -1,6 +1,7 @@
 import Card from "./components/Card";
 import dayjs from "dayjs";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import GithubSVG from "./components/GithubSVG";
 
 function App() {
   const [posts, setPosts] = useState<dayjs.Dayjs[]>([]);
@@ -81,6 +82,15 @@ function App() {
       <div className="float-left p-2 app-title">
         <a href="https://kperath.com/" target="_blank" rel="noreferrer">
           About Me
+        </a>
+      </div>
+      <div className="float-left p-0.5 scale-120">
+        <a
+          href="https://github.com/kperath/spacestagram"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <GithubSVG />
         </a>
       </div>
       <h1 className="app-title text-6xl md:text-8xl p-6 text-center">
